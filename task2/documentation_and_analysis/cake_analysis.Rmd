@@ -2,5 +2,37 @@
 title: "R Notebook"
 output: html_notebook
 ---
+```{r}
+library(tidyverse)
+library(dplyr)
+library(here)
+here::here()
+```
+
+```{r}
+# reading clean data from clean data folder
+clean_cake <- read_csv(here("clean_data/clean_cake-ingredients-1961.csv"))
+
+clean_cake_ingr_code <- read_csv(here("clean_data/clean_cake_ingredient_code.csv"))
+```
+
+
+```{r}
+# Q1 Which cake has the most cocoa in it?
+clean_cake %>% 
+  select(cake,cocoa) %>% 
+  filter(cocoa == max(cocoa))
+ 
+
+```
+
+
+```{r}
+```
+
+
+
+
+
 
 
