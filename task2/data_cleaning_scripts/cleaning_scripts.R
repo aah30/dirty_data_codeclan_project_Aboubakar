@@ -1,5 +1,6 @@
 library(here)
 library(dplyr)
+library(janitor)
 here::here()
 library(tidyverse)
 
@@ -37,9 +38,11 @@ code_names <- cake %>%
   names()
 
 
-# replace all abbreviations by actual ingredient names
-cake <- rename_(cake, .dots = setNames(code_names
-                               , actual_names )) 
+# replace all abbreviations by actual ingredient names, then cleaning name
+cake <- rename_(cake,
+                .dots = setNames(code_names,
+                 actual_names )) %>% 
+                clean_names()
 
 
 
