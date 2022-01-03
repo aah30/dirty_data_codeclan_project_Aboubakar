@@ -50,7 +50,15 @@ cake <- rename_(cake,
 #that match cake table which its column not all na
 cake_ingr_code <- cake_ingr_code %>% 
   filter(code %in% columns_names_not_all_na)
-  
+
+
+# taking our clean cake table names
+cake_name <- cake %>% names()
+
+# mutate ingredient column to match our cake table clean names
+cake_ingr_code <- cake_ingr_code %>% 
+  mutate(ingredient = cake_name[-1]) # [-1] here to remove cake names from the list  
+
   
 # writing the clean data to our folder clean data
 
