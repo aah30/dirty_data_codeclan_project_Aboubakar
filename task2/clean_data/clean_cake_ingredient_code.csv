@@ -1,34 +1,34 @@
 code,ingredient,measure
-AE,Almond essence,teaspoon
-BP,Baking powder,teaspoon
-BR,Butter,cup
-BS,Bananas,one
-CA,Cocoa,tablespoon
-CC,Cottage Cheese,pound
-CE,Chocolate,ounce
-CI,Crushed Ice,cup
-CS,Crumbs,cup
-CT,Cream of tartar,teaspoon
-DC,Dried currants,tablespoon
-EG,Eggs,one
-EW,Egg white,one
-EY,Egg yolk,one
-FR,Sifted flour,cup
-GN,Gelatin,tablespoon
-HC,Heavy cream,cup
-LJ,Lemon juice,tablespoon
-LR,Lemon rind,teaspoon
-MK,Milk,cup
-NG,Nutmeg,teaspoon
-NS,Nuts,cup
-RM,Rum,ounce
-SA,Soda,teaspoon
-SC,Sour cream cup,NA
-SG,Shortening,tablespoon
-SR,Granulated sugar,cup
-SS,Strawberries,quart
-ST,Salt,teaspoon
-VE,Vanilla extract,teaspoon
-WR,Water,cup
-YT,Yeast,ounce
-ZH,Zwiebach,ounce
+AE,almond_essence,teaspoon
+BP,baking_powder,teaspoon
+BR,butter,cup
+BS,bananas,one
+CA,cocoa,tablespoon
+CC,cottage_cheese,pound
+CE,chocolate,ounce
+CI,crushed_ice,cup
+CS,crumbs,cup
+CT,cream_of_tartar,teaspoon
+DC,dried_currants,tablespoon
+EG,eggs,one
+EW,egg_white,one
+EY,egg_yolk,one
+FR,sifted_flour,cup
+GN,gelatin,tablespoon
+HC,heavy_cream,cup
+LJ,lemon_juice,tablespoon
+LR,lemon_rind,teaspoon
+MK,milk,cup
+NG,nutmeg,teaspoon
+NS,nuts,cup
+RM,rum,ounce
+SA,soda,teaspoon
+SC,sour_cream_cup,NA
+SG,shortening,tablespoon
+SR,granulated_sugar,cup
+SS,strawberries,quart
+ST,salt,teaspoon
+VE,vanilla_extract,teaspoon
+WR,water,cup
+YT,yeast,ounce
+ZH,zwiebach,ounce
