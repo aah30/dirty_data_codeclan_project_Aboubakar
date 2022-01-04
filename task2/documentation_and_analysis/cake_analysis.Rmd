@@ -4,6 +4,7 @@ output: html_notebook
 ---
 ```{r}
 library(tidyverse)
+library(janitor)
 library(dplyr)
 library(here)
 here::here()
@@ -13,9 +14,11 @@ here::here()
 # reading clean data from clean data folder
 clean_cake <- read_csv(here("clean_data/clean_cake-ingredients-1961.csv"))
 
-clean_cake_ingr_code <- read_csv(here("clean_data/clean_cake_ingredient_code.csv"))
 ```
 
+```{r}
+clean_cake_ingr_code <- read_csv(here("clean_data/clean_cake_ingredient_code.csv"))
+```
 
 ```{r}
 # Q1 Which cake has the most cocoa in it?
@@ -28,11 +31,57 @@ clean_cake %>%
 
 
 ```{r}
+#Q2 For sponge cake, how many cups of ingredients are used in total?
+# below will select only ingredient that measure by cup from cake ingredient code table
+measure_by_cup <- clean_cake_ingr_code %>% 
+  filter(measure == "cup") %>% 
+  select(ingredient) %>% 
+  pull()
+ 
+```
+
+```{r}
+# now will use from previous chunck the ingredient use cup for mesurement to find out how many
+# cup used in sponge cake
+clean_cake %>% 
+  select(cake, measure_by_cup) %>% 
+  filter(cake == "Sponge") %>%
+   summarise(cake, total_cups = rowSums(.[-1]))
 ```
 
 
+```{r}
+# Q3-How many ingredients are measured in teaspoons?
+measure_by_teaspoons <- clean_cake_ingr_code %>% 
+ filter(measure == "teaspoon") %>%
+  summarise( ingredients_by_teaspoon = n())
+measure_by_teaspoons
+```
+
+```{r}
+#Q4-Which cake has the most unique ingredients?
+
+clean_cake %>% 
+pivot_longer("almond_essence":"zwiebach", names_to = "ingredient", values_to = "amount") %>% 
+  filter(amount != 0) %>% 
+  group_by(cake) %>% 
+  summarise(ingredients_used = n())  %>% 
+  slice_max(ingredients_used)
+ 
+```
 
 
+```{r}
+#Q5-Which ingredients are used only once?
+
+clean_cake %>% 
+pivot_longer("almond_essence":"zwiebach", names_to = "ingredient", values_to = "amount") %>% 
+  filter(amount != 0) %>% 
+  group_by(ingredient) %>% 
+  summarise(total_use = n()) %>% 
+  slice_min(total_use)
+
+```
 
 
 
