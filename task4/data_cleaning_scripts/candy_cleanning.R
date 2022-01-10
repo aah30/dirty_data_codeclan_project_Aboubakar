@@ -140,7 +140,7 @@ usa_pattern <- c("usausausa|usas|usaa|usa? hard to tell anymore..|usa!!!!!!|usa!
                  |	united ststes|united ststes|units states|usa|usa|usa (i think but it's an election year so who can really tell)
                  |usa usa usa|usa usa usa usa|usa usa usa!!!!|usa!|usa! usa!|usa!!!!!!|usa? hard to tell anymore..|usaa|usas|usausausa")
 
- clean_candy %>%
+ clean_candy <- clean_candy %>%
   mutate(country = case_when(
     str_detect(country, "not[\\s]{1,}") ~ NA_character_,
     str_detect(country, "australia") ~ "other",
@@ -152,11 +152,7 @@ usa_pattern <- c("usausausa|usas|usaa|usa? hard to tell anymore..|usa!!!!!!|usa!
     str_detect(country, str_c(canada_pattern, collapse = "|")) ~ "canada",
     is.na(country) == TRUE ~ NA_character_,
     TRUE ~ "other")
-  ) %>% 
-  select(country) %>% 
-    group_by(country) %>% 
-    summarise(no = n())
-
+  )
  
  #writting clean data to folder
  write_csv(clean_candy,"clean_data/clean_candy_15_16_17.csv")
