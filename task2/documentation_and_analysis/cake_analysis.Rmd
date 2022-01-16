@@ -1,36 +1,57 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "Task 2"
+output:
+  html_document:
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_float: yes
 ---
-```{r}
+```{r message=FALSE, echo=FALSE}
 library(tidyverse)
 library(janitor)
 library(dplyr)
 library(here)
-here::here()
 ```
+# A brief introduction to the dataset
+There are two dataset being used in this task, one is a cake dataset which continue all cakes and its ingredient being used in each cake. The ingredients names here in this dataset is a code for example, BR code meaning butter. The second dataset has all the ingredient names and its code that used in the first dataset.
 
-```{r}
-# reading clean data from clean data folder
+# Assumptions
+* First delete any column that all values are NA, which meaning that this ingredient didn’t use in any cake in the cake dataset.
+* Delete the code from the code dataset if did not use in first set (if find any column that its value NA).
+* Turn all NA to the number 0 which still meaning that this ingredient did not use in that cake(0 amount). The reason for that to improve the show of the dataset.
+
+# The steps used to clean the data
+* First reading the cake data from the row data file by using here method then trying to find all column that all variable not NA by sapply function.
+* select these column from step 1 which at least the column has one value.
+* Replace all NA into 0 by  _replace(is.na(.), 0)_
+* Reading the second set which has the actual code name and measures.
+* select the column code (names) from cake table in order to replace the code by actual names from the cake ingredient code dataset.
+* Filter the ingredient code set which will keep only the one use needed.
+*Writing the clean data to our folder clean data to be ready for the analysis.
+
+# Analysis questions
+## Reading the clean datasets from clean data folder
+### reading the cake dataset 
+```{r echo=FALSE, message=FALSE }
 clean_cake <- read_csv(here("clean_data/clean_cake-ingredients-1961.csv"))
-
+clean_cake
 ```
 
-```{r}
+### Reading the cake ingreadient code  
+```{r echo=FALSE, message=FALSE }
 clean_cake_ingr_code <- read_csv(here("clean_data/clean_cake_ingredient_code.csv"))
+clean_cake_ingr_code
 ```
-
-```{r}
-# Q1 Which cake has the most cocoa in it?
+## Q1 Which cake has the most cocoa in it?
+```{r echo=FALSE}
 clean_cake %>% 
   select(cake,cocoa) %>% 
   filter(cocoa == max(cocoa))
- 
-
 ```
 
-
-```{r}
+## Q2 For sponge cake, how many cups of ingredients are used in total?
+```{r echo=FALSE}
 #Q2 For sponge cake, how many cups of ingredients are used in total?
 # below will select only ingredient that measure by cup from cake ingredient code table
 measure_by_cup <- clean_cake_ingr_code %>% 
@@ -40,7 +61,7 @@ measure_by_cup <- clean_cake_ingr_code %>%
  
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 # now will use from previous chunck the ingredient use cup for mesurement to find out how many
 # cup used in sponge cake
 clean_cake %>% 
@@ -49,18 +70,15 @@ clean_cake %>%
    summarise(cake, total_cups = rowSums(.[-1]))
 ```
 
-
-```{r}
-# Q3-How many ingredients are measured in teaspoons?
-measure_by_teaspoons <- clean_cake_ingr_code %>% 
+## Q3 How many ingredients are measured in teaspoons?
+```{r echo=FALSE}
+ measure_by_teaspoons <- clean_cake_ingr_code %>% 
  filter(measure == "teaspoon") %>%
   summarise( ingredients_by_teaspoon = n())
 measure_by_teaspoons
 ```
-
-```{r}
-#Q4-Which cake has the most unique ingredients?
-
+## Q4 Which cake has the most unique ingredients?
+```{r echo=FALSE}
 clean_cake %>% 
 pivot_longer("almond_essence":"zwiebach", names_to = "ingredient", values_to = "amount") %>% 
   filter(amount != 0) %>% 
@@ -70,10 +88,9 @@ pivot_longer("almond_essence":"zwiebach", names_to = "ingredient", values_to = "
  
 ```
 
+## Q5 Which ingredients are used only once?
 
-```{r}
-#Q5-Which ingredients are used only once?
-
+```{r echo=FALSE}
 clean_cake %>% 
 pivot_longer("almond_essence":"zwiebach", names_to = "ingredient", values_to = "amount") %>% 
   filter(amount != 0) %>% 

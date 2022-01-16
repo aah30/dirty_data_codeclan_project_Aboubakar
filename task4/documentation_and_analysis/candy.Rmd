@@ -1,32 +1,55 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "Task 4"
+output:
+  html_document:
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_float: yes
 ---
-
-```{r}
+```{r message=FALSE, echo=FALSE}
 library(tidyverse)
 library(janitor)
 library(dplyr)
 library(here)
-here::here()
 ```
-# reading clean data from clean data folder
-```{r}
-clean_candy <- read_csv(here("clean_data/clean_candy_15_16_17.csv"))
+# A brief introduction to the dataset
+There are three datasets for three years 2015, 2016 and 2017 for Halloween Candy Data for different country. The data answering some question for example the ratings for the candy by different people (despair, joy and mech) also another questions such as  going out for trick and treat? For the 3 years.
+# Assumptions
+* Renaming columns to match the three datasets.
+* Adding missing column in any dataset to match each other in order to join them together
+* When we have the all columns in all datasets are the same names then use _bind rows_ to join the three datasets together.
 
+# The steps used to clean the data
+* Reading the three datasets then starting to clean the names the rename the column to match other column in different datasets
+* Use _pivot_longer_ function to reduce the number of column to have candy column and rating column.
+* Select the columns that we needed to answer or questions.
+* Adding missing columns country and gender to 2015 dataset
+* Adding a year column to 2016 and 2017 dataset.
+* Use gsub in 2017 dataset to clean and remove any number and letters belong to the names.
+* Use _bind rows_ to join the three datasets together.
+* Use three different pattern  for UK , USA and Canada to clean country column which the most difficult part in this task.
+* Writing the clean data in clean folder to be ready for the analysis sections
+
+
+# Analysis questions
+## Reading the clean datasets from clean data folder
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+clean_candy <- read_csv(here::here("clean_data/clean_candy_15_16_17.csv"))
+clean_candy
 ```
  
-#Q1-What is the total number of candy ratings given across the three years. (number of candy ratings, not number of raters. Don’t count missing values)
+## Q1 What is the total number of candy ratings given across the three years. (number of candy ratings, not number of raters. Don’t count missing values)
 
-```{r}
+```{r echo=FALSE}
 clean_candy %>% 
   select(ratings) %>% 
   summarise(total_no = sum(!is.na(ratings)))
 
 ```
 
-# Q2-What was the average age of people who are going out trick or treating and the average age of people not going trick or treating?
-```{r}
+## Q2 What was the average age of people who are going out trick or treating and the average age of people not going trick or treating?
+```{r echo=FALSE, warning=FALSE}
 clean_candy %>%  
   mutate(age, age = (as.numeric(age))) %>% 
   filter(age > 0 & age < 150) %>% # to get rid of any unkowing value
@@ -38,23 +61,23 @@ summarise(ave = mean(age))
 
 
 
-# Q3-For each of joy, despair and meh, which candy bar received the most of these ratings?
-```{r}
+## Q3 For each of joy, despair and meh, which candy bar received the most of these ratings?
+```{r echo=FALSE}
 clean_candy %>% 
   group_by(ratings) %>% 
 summarise(no_ratings = n()) %>% 
   slice_max(no_ratings)
 ```
-# Q4-How many people rated Starburst as despair?
-```{r}
+## Q4 How many people rated Starburst as despair?
+```{r echo=FALSE}
 clean_candy %>% 
   filter(candy == "starburst" ,ratings == "DESPAIR") %>% 
   group_by(ratings) %>% 
-  summarise(no_of_rated = n())
+  summarise(no_of_rating = n())
 ```
 
-# mutation for despair as -1, joy as +1 and meh as 0. to be ready for the next Qs
-```{r}
+## Mutation for despair as -1, joy as +1 and meh as 0. to be ready for the next Qs
+```{r echo=FALSE}
 clean_candy <- clean_candy %>% 
   mutate(new_rating = ifelse(ratings == "DESPAIR", -1,
                ifelse(ratings == "JOY",1 ,
@@ -65,15 +88,15 @@ clean_candy
 ```
 
 
-# Q6-What was the most popular candy bar by this rating system for each gender in the dataset?
-```{r}
+## Q6 What was the most popular candy bar by this rating system for each gender in the dataset?
+```{r echo=FALSE}
 clean_candy %>% 
   group_by(gender) %>% 
  summarise(most_pop_candy = sum(new_rating, na.rm = TRUE)) %>% 
   arrange(desc(most_pop_candy))
 ```
-# Q7- What was the most popular candy bar in each year?
-```{r}
+## Q7 What was the most popular candy bar in each year?
+```{r echo=FALSE}
 
 clean_candy %>% 
   group_by(year) %>% 
@@ -81,12 +104,18 @@ clean_candy %>%
   arrange(desc(most_pop_candy))
 
 ```
-# Q8-What was the most popular candy bar by this rating for people in US, Canada, UK and all other countries?
-```{r}
+## Q8 What was the most popular candy bar by this rating for people in US, Canada, UK and all other countries?
+```{r echo=FALSE}
 clean_candy %>% 
   group_by(country) %>% 
  summarise(most_pop_candy = sum(new_rating, na.rm = TRUE)) %>% 
   arrange(desc(most_pop_candy))
 
 ```
+
+
+
+
+
+
 
